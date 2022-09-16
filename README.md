@@ -25,3 +25,11 @@ https://docs.expo.dev/get-started/installation/#2-expo-go-app-for-ios-and
 3. before npm run start, run `expo login` to connect to expo server by expo-cli
 4. run `npm run start`
 5. choose corresponding instance in the mobile device
+
+#### React Native Core Components
+
+https://reactnative.dev/docs/components-and-apis
+
+#### Online Resource
+
+- [Expo Snack](https://snack.expo.dev/)
