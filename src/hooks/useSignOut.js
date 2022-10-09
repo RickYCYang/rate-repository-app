@@ -1,18 +1,21 @@
 import { useQuery, useApolloClient } from '@apollo/client';
-import { ME } from '../graphql/queries';
+import { GET_CURRENT_USER } from '../graphql/queries';
+import { useNavigate } from 'react-router-native';
 
 const useSignOut = (authStorage) => {
+  const navigate = useNavigate();
   const apolloClient = useApolloClient();
-  const me = useQuery(ME, {});
+  const { data } = useQuery(GET_CURRENT_USER, {});
 
   const signOut = async () => {
-    if (me.data?.me) {
+    if (data?.me) {
       await authStorage.removeAccessToken();
       apolloClient.resetStore();
+      navigate('/');
     }
   };
 
-  return [me.data?.me, signOut];
+  return [data?.me, signOut];
 };
 
 export default useSignOut;

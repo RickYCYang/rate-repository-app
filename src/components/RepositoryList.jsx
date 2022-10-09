@@ -1,38 +1,51 @@
-import { FlatList, View, StyleSheet } from 'react-native';
-import { useQuery } from '@apollo/client';
-import RepositoryItem from './RepositoryItem';
-//import useRepositories from '../hooks/useRepositories';
-import { GET_REPOSITORIES } from '../graphql/queries';
+import { useState } from 'react';
+import { View } from 'react-native';
 
-const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-  },
-});
+import RepositoryListContainer from './RepositoryListContainer';
+import useRepositories from '../hooks/useRepositories';
+import RepositorySortModal from './RepositorySortModal';
 
-const ItemSeparator = () => <View style={styles.separator} />;
+import { sortPrincipleOfRepository, sortPrinciples } from '../utils/const';
 
 const RepositoryList = () => {
-  //const { repositories } = useRepositories();
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const [selectedSortPrinciple, setSelectedSortPrinciple] = useState(
+    sortPrincipleOfRepository[sortPrinciples.LATEST_REPOSITORY]
+  );
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const { repositories, fetchMore } = useRepositories(
+    selectedSortPrinciple?.orderBy,
+    selectedSortPrinciple?.orderDirection,
+    searchKeyword
+  );
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+
+  const onEndReach = () => {
+    //console.log('You have reached the end of the list');
+    fetchMore();
+  };
 
   //console.log('repositories', repositories);
 
-  // Get the nodes from the edges array
-  const repositoryNodes = data
-    ? data.repositories.edges.map((edge) => edge.node)
-    : [];
-
   return (
-    <FlatList
-      data={repositoryNodes}
-      //data={repositories}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem repository={item} />}
-      keyExtractor={(repository) => repository.id}
-    />
+    <View>
+      <RepositoryListContainer
+        repositories={repositories}
+        openModal={openModal}
+        selectedSortPrinciple={selectedSortPrinciple}
+        setSearchKeyword={setSearchKeyword}
+        onEndReach={onEndReach}
+      />
+      <RepositorySortModal
+        visible={modalVisible}
+        openModal={openModal}
+        closeModal={closeModal}
+        selectedSortPrinciple={selectedSortPrinciple}
+        setSelectedSortPrinciple={setSelectedSortPrinciple}
+      />
+    </View>
   );
 };
 

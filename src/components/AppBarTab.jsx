@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   item: {
-    marginRight: 10,
+    marginRight: 15,
   },
 });
 
@@ -27,17 +27,36 @@ const AppBarTab = () => {
         </Text>
       </Link>
       {!me ? (
-        <Link to="/signin" style={styles.item}>
-          <Text color="textLight" fontWeight="bold" fontSize="subheading">
-            Signin
-          </Text>
-        </Link>
+        <>
+          <Link to="/signin" style={styles.item}>
+            <Text color="textLight" fontWeight="bold" fontSize="subheading">
+              Sign in
+            </Text>
+          </Link>
+          <Link to="/signup">
+            <Text color="textLight" fontWeight="bold" fontSize="subheading">
+              Sign up
+            </Text>
+          </Link>
+        </>
       ) : (
-        <Pressable onPress={signOut}>
-          <Text color="textLight" fontWeight="bold" fontSize="subheading">
-            Sign out
-          </Text>
-        </Pressable>
+        <>
+          <Link to="/create-review" style={styles.item}>
+            <Text color="textLight" fontWeight="bold" fontSize="subheading">
+              Create a review
+            </Text>
+          </Link>
+          <Link to="/myReview" style={styles.item}>
+            <Text color="textLight" fontWeight="bold" fontSize="subheading">
+              My reviews
+            </Text>
+          </Link>
+          <Pressable onPress={signOut}>
+            <Text color="textLight" fontWeight="bold" fontSize="subheading">
+              Sign out
+            </Text>
+          </Pressable>
+        </>
       )}
     </View>
   );

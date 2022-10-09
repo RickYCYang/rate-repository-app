@@ -1,28 +1,45 @@
-import { useState, useEffect } from 'react';
-import Constants from 'expo-constants';
+import { useQuery } from '@apollo/client';
+import { GET_REPOSITORIES } from '../graphql/queries';
 
-const useRepositories = () => {
-  const [repositories, setRepositories] = useState();
-  const [loading, setLoading] = useState(false);
+const pageSize = 8;
 
-  const fetchRepositories = async () => {
-    setLoading(true);
+const useRepositories = (orderBy, orderDirection, searchKeyword) => {
+  const { data, error, loading, fetchMore } = useQuery(GET_REPOSITORIES, {
+    fetchPolicy: 'cache-and-network',
+    //fetchPolicy: 'network-only',
+    variables: {
+      orderBy,
+      orderDirection,
+      searchKeyword,
+      first: pageSize,
+      after: '',
+    },
+  });
 
-    // Replace the IP address part with your own IP address!
-    const response = await fetch(
-      `${Constants.manifest.extra.restUri}/repositories`
-    );
-    const json = await response.json();
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
 
-    setLoading(false);
-    setRepositories(json);
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        first: pageSize,
+        orderBy,
+        orderDirection,
+        searchKeyword,
+      },
+    });
   };
 
-  useEffect(() => {
-    fetchRepositories();
-  }, []);
-
-  return { repositories, loading, refetch: fetchRepositories };
+  return {
+    repositories: data?.repositories,
+    error,
+    loading,
+    fetchMore: handleFetchMore,
+  };
 };
 
 export default useRepositories;

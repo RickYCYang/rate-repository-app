@@ -9,6 +9,10 @@ npm run android
 npm run web
 ```
 
+### Backend api server
+
+[rate-repository-api](https://github.com/fullstack-hy2020/rate-repository-api): Follow the instructions of `Getting started` section to setup the server
+
 ### React Native Document for Development Setup
 
 https://docs.expo.dev/get-started/installation/#2-expo-go-app-for-ios-and

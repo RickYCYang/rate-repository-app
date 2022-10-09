@@ -1,7 +1,8 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
 import theme from '../theme';
 import AuthorProfile from './AuthorProfile';
 import RepositoryIndex from './RepositoryIndex';
+import Button from './Button';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,11 +16,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  buttonContainer: {
+    marginTop: 10,
+  },
 });
 
-const RepositoryItem = ({ repository }) => {
+const openUrl = (url) => {
+  Linking.openURL(url);
+};
+
+const RepositoryItem = ({ repository, showOpenUrlButton }) => {
+  //console.log('repository', repository);
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="repositoryItem">
       <View style={styles.authorContainer}>
         <AuthorProfile
           ownerAvatarUrl={repository.ownerAvatarUrl}
@@ -34,6 +43,14 @@ const RepositoryItem = ({ repository }) => {
         <RepositoryIndex index={repository.reviewCount} caption="Reviews" />
         <RepositoryIndex index={repository.ratingAverage} caption="Rating" />
       </View>
+      {showOpenUrlButton && (
+        <View style={styles.buttonContainer}>
+          <Button
+            onClick={() => openUrl(repository.url)}
+            label="Open in GitHub"
+          />
+        </View>
+      )}
     </View>
   );
 };
