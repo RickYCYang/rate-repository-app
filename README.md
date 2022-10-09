@@ -57,5 +57,7 @@ https://reactnative.dev/docs/components-and-apis
 - Create a Review
 <img width="359" alt="image" src="https://user-images.githubusercontent.com/54363801/194753635-716eecc4-72fb-416c-9347-04567a2cdb6c.png">
 
+#### Certificate of HELSINKI
+![image](https://user-images.githubusercontent.com/54363801/194753971-283a8522-d57d-44ad-8fbd-895541d39772.png)
 
 
